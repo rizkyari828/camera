@@ -1221,50 +1221,62 @@ class Camera
   }
 
   synchronized void closeCaptureSession() {
-    if (captureSession != null) {
-      Log.i(TAG, "closeCaptureSession");
+    try {
+      if (captureSession != null) {
+        Log.i(TAG, "closeCaptureSession");
 
-      captureSession.close();
-      captureSession = null;
+        captureSession.close();
+        captureSession = null;
+      }
+    } catch (Exception e) {
+      
     }
   }
 
   synchronized public void close() {
-    Log.i(TAG, "close");
+    try {
+      Log.i(TAG, "close");
 
-    stopAndReleaseCamera();
+      stopAndReleaseCamera();
 
-    if (pictureImageReader != null) {
-      pictureImageReader.close();
-      pictureImageReader = null;
-    }
-    if (imageStreamReader != null) {
-      imageStreamReader.close();
-      imageStreamReader = null;
-    }
-    if (mediaRecorder != null) {
-      mediaRecorder.reset();
-      mediaRecorder.release();
-      mediaRecorder = null;
-    }
+      if (pictureImageReader != null) {
+        pictureImageReader.close();
+        pictureImageReader = null;
+      }
+      if (imageStreamReader != null) {
+        imageStreamReader.close();
+        imageStreamReader = null;
+      }
+      if (mediaRecorder != null) {
+        mediaRecorder.reset();
+        mediaRecorder.release();
+        mediaRecorder = null;
+      }
 
-    stopBackgroundThread();
+      stopBackgroundThread();
+    } catch (Exception e) {
+      
+    }
   }
 
   synchronized private void stopAndReleaseCamera() {
-    if (cameraDevice != null) {
-      cameraDevice.close();
-      cameraDevice = null;
+    try {
+      if (cameraDevice != null) {
+        cameraDevice.close();
+        cameraDevice = null;
 
-      // Closing the CameraDevice without closing the CameraCaptureSession is recommended
-      // for quickly closing the camera:
-      // https://developer.android.com/reference/android/hardware/camera2/CameraCaptureSession#close()
-      captureSession = null;
-    } else {
-      closeCaptureSession();
+        // Closing the CameraDevice without closing the CameraCaptureSession is recommended
+        // for quickly closing the camera:
+        // https://developer.android.com/reference/android/hardware/camera2/CameraCaptureSession#close()
+        captureSession = null;
+      } else {
+        closeCaptureSession();
+      }
+    } catch (Exception e) {
+      
     }
   }
-
+  
   private void prepareVideoRenderer() {
     if (videoRenderer != null) return;
     final ResolutionFeature resolutionFeature = cameraFeatures.getResolution();
